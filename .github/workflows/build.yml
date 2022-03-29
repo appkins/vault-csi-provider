@@ -42,7 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: ["arm", "arm64", "386", "amd64", "windows"]
+        os: ["linux", "windows"]
+        arch: ["arm", "arm64", "386", "amd64"]
       fail-fast: true
 
     name: Go linux ${{ matrix.arch }} build
@@ -57,16 +58,16 @@ jobs:
 
       - name: Build
         env:
-          GOOS: "linux"
+          GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.arch }}
         run: |
           mkdir dist out
           make build
-          zip -r -j out/${{ env.PKG_NAME }}_${{ needs.get-product-version.outputs.product-version }}_linux_${{ matrix.arch }}.zip dist/
+          zip -r -j out/${{ env.PKG_NAME }}_${{ needs.get-product-version.outputs.product-version }}_${{ matrix.os }}_${{ matrix.arch }}.zip dist/
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.PKG_NAME }}_${{ needs.get-product-version.outputs.product-version }}_linux_${{ matrix.arch }}.zip
-          path: out/${{ env.PKG_NAME }}_${{ needs.get-product-version.outputs.product-version }}_linux_${{ matrix.arch }}.zip
+          name: ${{ env.PKG_NAME }}_${{ needs.get-product-version.outputs.product-version }}_${{ matrix.os }}_${{ matrix.arch }}.zip
+          path: out/${{ env.PKG_NAME }}_${{ needs.get-product-version.outputs.product-version }}_${{ matrix.os }}_${{ matrix.arch }}.zip
 
   build-docker:
     name: Docker ${{ matrix.arch }} build
@@ -76,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: ["arm", "arm64", "386", "amd64", "windows"]
+        arch: ["arm", "arm64", "386", "amd64"]
     env:
       repo: ${{github.event.repository.name}}
       version: ${{needs.get-product-version.outputs.product-version}}
