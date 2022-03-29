@@ -112,13 +112,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          file: windows.Dockerfile
-          build-args: |
-            PRODUCT_VERSION=${{env.version}}
-            PRODUCT_REVISION=${{env.version}}
-            TARGETOS=windows
-            TARGETARCH=${{ matrix.arch }}
-          tags: appkins/${{env.repo}}:${{env.version}}
+        run: |
+          docker build . -f windows.Dockerfile \
+                         --build-arg PRODUCT_VERSION=${{env.version}} \
+                         --build-arg TARGETOS=windows \
+                         --build-arg TARGETARCH=${{ matrix.arch }}
