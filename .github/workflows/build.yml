@@ -46,7 +46,7 @@ jobs:
         arch: ["arm", "arm64", "386", "amd64"]
       fail-fast: true
 
-    name: Go linux ${{ matrix.arch }} build
+    name: Go ${{ matrix.os }} ${{ matrix.arch }} build
 
     steps:
       - uses: actions/checkout@v2
