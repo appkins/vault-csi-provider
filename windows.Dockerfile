@@ -4,7 +4,7 @@
 # devbuild compiles the binary
 # -----------------------------------
 
-FROM docker.mirror.hashicorp.services/golang:1.17.6-windowsservercore AS devbuild
+FROM golang:windowsservercore AS devbuild
 ENV CGO_ENABLED=0
 # Leave the GOPATH
 WORKDIR /build
@@ -13,13 +13,13 @@ RUN go build -o vault-csi-provider
 
 # dev runs the binary from devbuild
 # -----------------------------------
-FROM mcr.microsoft.com/windows/servercore:1809 AS dev
+FROM mcr.microsoft.com/windows/nanoserver:ltsc2022 AS dev
 COPY --from=devbuild /build/vault-csi-provider.exe /vault-csi-provider.exe
 ENTRYPOINT [ "/vault-csi-provider.exe" ]
 
 # Default release image.
 # -----------------------------------
-FROM mcr.microsoft.com/windows/servercore:1809 AS default
+FROM mcr.microsoft.com/windows/nanoserver:ltsc2022 AS default
 
 ARG PRODUCT_VERSION
 ARG PRODUCT_REVISION
