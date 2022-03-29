@@ -111,7 +111,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: actions/checkout@v2
       - name: Build and push
-        uses: actions/checkout@v2
         run: |
           docker build . -f windows.Dockerfile --build-arg PRODUCT_VERSION=${{env.version}} --build-arg TARGETOS=windows --build-arg TARGETARCH=${{ matrix.arch }}
