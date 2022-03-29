@@ -113,7 +113,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         run: |
-          docker build . -f windows.Dockerfile \
-                         --build-arg PRODUCT_VERSION=${{env.version}} \
-                         --build-arg TARGETOS=windows \
-                         --build-arg TARGETARCH=${{ matrix.arch }}
+          docker build . -f windows.Dockerfile --build-arg PRODUCT_VERSION=${{env.version}} --build-arg TARGETOS=windows --build-arg TARGETARCH=${{ matrix.arch }}
